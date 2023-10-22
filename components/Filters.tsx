@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 
-const links = ['All', 'Next-js', 'React', 'jr-Front-End', 'Full-Stack']
+const links = ['all', 'next-js', 'react', 'jr-Front-End', 'full-Stack']
 
 const Filters = () => {
 
     const [active, setActive] = useState("");
 
     const handleFilter = (link: string) => {
+        
         setActive(link);
     };
 
@@ -17,8 +18,9 @@ const Filters = () => {
             {links.map((link) => (
                 <button
                     key={link}
-                    onClick={() => {}}
-                    className={`${active === link ? 'gradient_yellow-green' : ''}whitespace-nowrap rounded-lg px-8 py-2.5 capitalize`}
+                    onClick={() => {handleFilter(link)}}
+                    className={`${
+                        active === link ? "gradient_blue-purple" : "" } whitespace-nowrap rounded-lg px-8 py-2.5 capitalize`}
                 >
                     {link}
                 </button>
