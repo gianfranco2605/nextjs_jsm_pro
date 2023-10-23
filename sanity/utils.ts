@@ -1,9 +1,9 @@
 interface BuildQueryParams {
-    type: string,
-    query: string,
-    category: string,
-    page: number,
-    perPage?: number
+    type: string;
+    query: string;
+    category: string;
+    page: number;
+    perPage?: number;
 }
 
 export function buildQuery(params: BuildQueryParams) {
@@ -11,7 +11,7 @@ export function buildQuery(params: BuildQueryParams) {
 
     const conditions = [`*[_type=="${type}"]`];
 
-    if(query) {
+    if (query) {
         conditions.push(`title match "*${query}*"`);
     }
 
@@ -19,5 +19,13 @@ export function buildQuery(params: BuildQueryParams) {
         conditions.push(`category == "${category}"`);
     }
 
-    //calcolate paginations limits
+    // Calculate pagination limits
+    const offset = (page - 1) * perPage;
+    const limit = perPage;
+
+    const queryExpression = conditions.length > 1
+        ? `${conditions.join(' && ')}[${offset}...${limit}]`
+        : `${conditions.join(' && ')}[${offset}...${limit}]`;
+
+    return queryExpression;
 }
