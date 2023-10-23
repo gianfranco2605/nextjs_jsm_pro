@@ -1,4 +1,5 @@
 import Filters from "@/components/Filters"
+import Header from "@/components/Header";
 import ResourceCard from "@/components/ResourceCard"
 import SearchForm from "@/components/SearchForm"
 import { getResources } from "@/sanity/actions"
@@ -6,16 +7,21 @@ import { getResources } from "@/sanity/actions"
 // 900sec to update serverside every  15min sanity
 export const revalidate = 900;
 
-const Page = async () => {
+interface Props {
+  searchParams: { [key: string]: string | undefined }
+}
 
+const Page = async ( {searchParams}: Props ) => {
+  
   const resources = await getResources({
     query: '',
-    category: '',
+    category: searchParams?.category || '',
     page: '1'
   })
 
   console.log(resources);
   
+
   return (
     <main className="flex-center paddings mx-auto w-full max-w-screen-2xl flex-col">
       <section className="nav-padding w-full">
@@ -28,6 +34,7 @@ const Page = async () => {
       <Filters />
 
       <section className="mt-12 flex w-full flex-wrap justify-center gap-16 sm:justify-start">
+        <Header />
         {resources?.length > 0 ? (
           resources.map((resource: any) => (
             <ResourceCard 

@@ -1,13 +1,50 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
+import { formUrlQuery } from '@/sanity/utils';
+
+
 
 const SearchForm = () => {
 
+    // next navigation functions
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathName = usePathname(); 
+
     const [search, setSearch] = useState('');
+
+    // debouncing with useEffect
+    // Debouncing is a programming practice used to ensure that time-consuming tasks do not fire so often, that it stalls the performance of the web page. In other words, it limits the rate at which a function gets invoked.
+    // https://www.geeksforgeeks.org/debouncing-in-javascript/
+
+    useEffect(() => {
+        const delayDebounceFunction = setTimeout(() => {
+            
+            let newUrl = '';
+
+            if(search) {
+                newUrl = formUrlQuery({
+                    params: searchParams.toString(),
+                    key: 'query',
+                    value: search
+                })
+            } else {
+                newUrl = formUrlQuery({
+                    params: searchParams.toString(),
+                    keysToRemove: ['query']
+                })
+            }
+            router.push(newUrl, {scroll: false})
+        }, 300)
+
+        return () => clearTimeout(delayDebounceFunction)
+    }, [search])
 
     return (
         <form className='flex-center mx-auto mt-10 w-full sm:-mt-5 sm:px-5'>

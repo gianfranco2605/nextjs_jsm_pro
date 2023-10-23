@@ -1,3 +1,5 @@
+// library for query string management
+import qs from 'query-string';
 interface BuildQueryParams {
     type: string;
     query: string;
@@ -28,4 +30,32 @@ export function buildQuery(params: BuildQueryParams) {
         : `${conditions.join(' && ')}[${offset}...${limit}]`;
 
     return queryExpression;
+}
+
+interface urlQueryParams {
+    params: string
+    key?: string
+    value?: string | null
+    keysToRemove?: string[];
+}
+
+export function formUrlQuery({ params, key, value, keysToRemove }: urlQueryParams) {
+
+    const currentUrl = qs.parse(params);
+
+    if(keysToRemove) {
+        keysToRemove.forEach((keyToRemove) => {
+            delete currentUrl[keyToRemove];
+        })
+    }else if(key && value) {
+        currentUrl[key] = value;
+    }
+    
+    
+
+    return qs.stringifyUrl(
+        { url: window.location.pathname, query: currentUrl },
+        { skipNull: true }
+    )
+    
 }

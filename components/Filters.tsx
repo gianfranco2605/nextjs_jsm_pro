@@ -1,16 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState } from "react";
+import { formUrlQuery } from "@/sanity/utils";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const links = ['all', 'next-js', 'react', 'jr-Front-End', 'full-Stack']
 
 const Filters = () => {
 
     const [active, setActive] = useState("");
+    const searchParams = useSearchParams();
+    const router = useRouter();
 
     const handleFilter = (link: string) => {
+
+        let newUrl = ''; 
+
+        if(active === link) {
+            setActive('');
+
+            newUrl = formUrlQuery({
+                params: searchParams.toString(),
+                key: 'category',
+                value: null,
+            })
+        } else {
+            setActive(link);
+
+            newUrl = formUrlQuery({
+                params: searchParams.toString(),
+                key: 'category',
+                value: link.toLowerCase(),
+            })
+        }
         
-        setActive(link);
+        router.push(newUrl, { scroll: false })
     };
 
     return (
