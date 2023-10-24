@@ -13,13 +13,14 @@ interface Props {
     title: string,
     downLoadNumber: number,
     image: string,
+    downloadLink: string
 }
 
-const ResourceCard = ({ id, title, image, downLoadNumber }: Props) => {
+const ResourceCard = ({ id, title, image, downLoadNumber, downloadLink }: Props) => {
   return (
     // shadcn component
     <Card className="w-full max-w-fit border-0 !bg-transparent sm:max-w-[356px]">
-        <Link href={`/resource/${id}`}>
+        <Link href={downloadLink} target="_blank">
             <CardHeader className="flex-center flex-col gap-2.5 !p-0">
                 <div className="h-fit w-full">
                     <Image 
@@ -43,7 +44,7 @@ const ResourceCard = ({ id, title, image, downLoadNumber }: Props) => {
                     />
                     {downLoadNumber}
                 </div>
-                <Link className="flex-center text-gradient_purple-blue body-semibold gap-1.5" href={`/resource/${id}`}>
+                <Link className="flex-center text-gradient_purple-blue body-semibold gap-1.5" href={downloadLink} target="_blank">
                     Download Now
                     <Image 
                         src="arrow-blue.svg" 
